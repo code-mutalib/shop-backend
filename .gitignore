@@ -1,0 +1,79 @@
+# =========================
+# Dependencies
+# =========================
+node_modules/
+
+# pnpm store (if local)
+.pnpm-store/
+
+# =========================
+# Lock File (IMPORTANT)
+# =========================
+# DO NOT ignore this
+# pnpm-lock.yaml
+
+# =========================
+# Environment Variables
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# Logs
+# =========================
+logs/
+*.log
+pnpm-debug.log*
+
+# =========================
+# Runtime / Temp Files
+# =========================
+pids
+*.pid
+*.seed
+*.pid.lock
+tmp/
+temp/
+
+# =========================
+# Build Output
+# =========================
+dist/
+build/
+
+# =========================
+# Coverage
+# =========================
+coverage/
+
+# =========================
+# Uploads (multer)
+# =========================
+uploads/
+public/uploads/
+
+# =========================
+# MongoDB (Local Only)
+# =========================
+mongodb-data/
+*.mongodb
+
+# =========================
+# OS Files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# IDE / Editors
+# =========================
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# =========================
+# Vercel
+# =========================
+.vercel/
