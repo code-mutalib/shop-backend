@@ -4,6 +4,7 @@ import 'dotenv/config';
 import dbConnection from './config/db.js';
 import seedAdmin from './utils/seedAdmin.js';
 import userRouter from './routes/user.routes.js';
+import productRouter from "./routes/product.routes.js";
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -17,6 +18,7 @@ app.get('/', (req, res) => {
 
 /* ================= ROUTES ================= */
 app.use('/api/users', userRouter);
+app.use("/api/products", productRouter);
 
 /* ================= GLOBAL ERROR HANDLER ================= */
 app.use((err, req, res, next) => {
