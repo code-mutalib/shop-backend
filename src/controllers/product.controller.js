@@ -1,4 +1,4 @@
-import Product from "../models/product.model.js";
+import Product from '../models/product.model.js';
 
 /* =========================================================
    CREATE PRODUCT (ADMIN)
@@ -11,7 +11,7 @@ export const createProduct = async (req, res, next) => {
     if (!name || !category || !variants || !description) {
       return res.status(400).json({
         success: false,
-        message: "Required fields missing",
+        message: 'Required fields missing',
       });
     }
 
@@ -26,7 +26,7 @@ export const createProduct = async (req, res, next) => {
 
     return res.status(201).json({
       success: true,
-      message: "Product created successfully",
+      message: 'Product created successfully',
       product,
     });
   } catch (error) {
@@ -43,7 +43,7 @@ export const getAllProducts = async (req, res, next) => {
 
     const filter = {};
     if (category) filter.category = category;
-    if (featured) filter.isFeatured = featured === "true";
+    if (featured) filter.isFeatured = featured === 'true';
 
     const products = await Product.find(filter)
       .sort({ createdAt: -1 })
@@ -77,7 +77,7 @@ export const getSingleProduct = async (req, res, next) => {
     if (!product) {
       return res.status(404).json({
         success: false,
-        message: "Product not found",
+        message: 'Product not found',
       });
     }
 
@@ -95,22 +95,21 @@ export const getSingleProduct = async (req, res, next) => {
 ========================================================= */
 export const updateProduct = async (req, res, next) => {
   try {
-    const product = await Product.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true, runValidators: true }
-    );
+    const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
 
     if (!product) {
       return res.status(404).json({
         success: false,
-        message: "Product not found",
+        message: 'Product not found',
       });
     }
 
     return res.status(200).json({
       success: true,
-      message: "Product updated successfully",
+      message: 'Product updated successfully',
       product,
     });
   } catch (error) {
@@ -128,7 +127,7 @@ export const deleteProduct = async (req, res, next) => {
     if (!product) {
       return res.status(404).json({
         success: false,
-        message: "Product not found",
+        message: 'Product not found',
       });
     }
 
@@ -136,7 +135,7 @@ export const deleteProduct = async (req, res, next) => {
 
     return res.status(200).json({
       success: true,
-      message: "Product deleted successfully",
+      message: 'Product deleted successfully',
     });
   } catch (error) {
     next(error);
