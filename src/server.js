@@ -20,18 +20,18 @@ app.get('/', (req, res) => {
 app.use('/api/users', userRouter);
 app.use("/api/products", productRouter);
 
+/* ================= 404 HANDLER ================= */
+app.use((req, res, next) => {
+  res.status(404).json({ success: false, message: 'Route not found' });
+});
+
 /* ================= GLOBAL ERROR HANDLER ================= */
 app.use((err, req, res, next) => {
-  console.log('Server Error:', err.message);
+  console.error('Server Error:', err.message);
   res.status(500).json({
     success: false,
     message: err.message || 'Internal Server Error',
   });
-});
-
-/* ================= 404 HANDLER ================= */
-app.use((req, res) => {
-  res.status(404).json({ message: 'Route not found' });
 });
 
 dbConnection()

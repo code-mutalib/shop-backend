@@ -39,7 +39,9 @@ export const createProduct = async (req, res, next) => {
 ========================================================= */
 export const getAllProducts = async (req, res, next) => {
   try {
-    const { page = 1, limit = 10, category, featured } = req.query;
+    const { category, featured } = req.query;
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
 
     const filter = {};
     if (category) filter.category = category;
@@ -48,7 +50,7 @@ export const getAllProducts = async (req, res, next) => {
     const products = await Product.find(filter)
       .sort({ createdAt: -1 })
       .skip((page - 1) * limit)
-      .limit(Number(limit))
+      .limit(limit)
       .lean();
 
     const total = await Product.countDocuments(filter);
@@ -56,7 +58,7 @@ export const getAllProducts = async (req, res, next) => {
     return res.status(200).json({
       success: true,
       total,
-      page: Number(page),
+      page,
       pages: Math.ceil(total / limit),
       products,
     });
@@ -70,9 +72,7 @@ export const getAllProducts = async (req, res, next) => {
 ========================================================= */
 export const getSingleProduct = async (req, res, next) => {
   try {
-    const product = await Product.findOne({
-      slug: req.params.slug,
-    }).lean();
+    const product = await Product.findById(req.params.id).lean();
 
     if (!product) {
       return res.status(404).json({
@@ -95,10 +95,7 @@ export const getSingleProduct = async (req, res, next) => {
 ========================================================= */
 export const updateProduct = async (req, res, next) => {
   try {
-    const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
+    const product = await Product.findById(req.params.id);
 
     if (!product) {
       return res.status(404).json({
@@ -106,6 +103,18 @@ export const updateProduct = async (req, res, next) => {
         message: 'Product not found',
       });
     }
+
+    // Update fields
+    const { name, category, variants, description, images, isFeatured } = req.body;
+    if (name !== undefined) product.name = name;
+    if (category !== undefined) product.category = category;
+    if (variants !== undefined) product.variants = variants;
+    if (description !== undefined) product.description = description;
+    if (images !== undefined) product.images = images;
+    if (isFeatured !== undefined) product.isFeatured = isFeatured;
+
+    // Save triggers pre('save') hook for slug regeneration
+    await product.save();
 
     return res.status(200).json({
       success: true,

@@ -13,7 +13,7 @@ const productRouter = express.Router();
 
 /* ================= PUBLIC ROUTES ================= */
 productRouter.get('/', getAllProducts);
-productRouter.get('/:slug', getSingleProduct);
+productRouter.get('/:id', getSingleProduct);
 
 /* ================= ADMIN ROUTES ================= */
 productRouter.post('/', authMiddleware(['admin']), createProduct);

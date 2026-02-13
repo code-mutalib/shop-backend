@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import slugify from 'slugify';
 
 const variantSchema = new mongoose.Schema(
   {
@@ -30,11 +29,6 @@ const productSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    slug: {
-      type: String,
-      unique: true,
-      index: true,
-    },
     category: {
       type: String,
       required: true,
@@ -42,7 +36,10 @@ const productSchema = new mongoose.Schema(
     },
     variants: {
       type: [variantSchema],
-      validate: [(val) => val.length > 0, 'At least one variant is required'],
+      validate: {
+        validator: (val) => val.length > 0,
+        message: 'At least one variant is required',
+      },
     },
     description: {
       type: String,
@@ -59,16 +56,5 @@ const productSchema = new mongoose.Schema(
   },
   { timestamps: true },
 );
-
-/* ================= AUTO SLUG GENERATION ================= */
-productSchema.pre('save', function (next) {
-  if (this.isModified('name')) {
-    this.slug = slugify(this.name, {
-      lower: true,
-      strict: true,
-    });
-  }
-  next();
-});
 
 export default mongoose.model('Product', productSchema);
